@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+<a th:href="@{/admin}">Вернуться в личный кабинет</a>
+<br>
+<h3>Пользователи: </h3>
+<div th:each="user : ${users}">
+    <form th:method="POST" th:action="@{/admin/users/edit/{id}(id=${user.getId()})}" th:object="${user}"
+          enctype="multipart/form-data">
+        <h3 th:text="'Пользователь - ' + ${user.getLogin()}"></h3>
+        <label for="role" th:text="'Роль - ' + ${user.getRole()}"></label>
+        <br>
+        <label for="role">Сменить роль:</label>
+        <select name="role" th:field="*{role}" th:selected="${user.getRole()}" id="role">
+            <div>
+                <option th:text="Администратор" th:value="ROLE_ADMIN">
+                <option th:text="Пользователь" th:value="ROLE_USER">
+            </div>
+        </select>
+        <div style="color: red" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
+        <input type="submit" value="Изменить роль">
+        <br>
+    </form>
+    <br>
+</div>
+</body>
+</html>

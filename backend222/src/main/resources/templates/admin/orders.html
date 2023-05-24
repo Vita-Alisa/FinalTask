@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+</head>
+<body>
+<a th:href="@{/admin}">Вернуться в личный кабинет</a>
+<br>
+<h3>Поиск:</h3>
+<form th:method="POST" th:action="@{/admin/orders/search}">
+    <fieldset>
+        <legend>Выберите параметры для сортировки, поиска, фильтрации:</legend>
+        <input type="text" id="search" name="search" th:value="*{value_search}">
+        <br>
+        <label for="search">Поиск по наименованию</label>
+
+        <br>
+        <div>
+            <br>
+            <br>
+            <input type="submit" value="Найти">
+        </div>
+    </fieldset>
+</form>
+<hr>
+<h3>Результат поиска: </h3>
+<div th:each="order : ${search_order}">
+    <form th:method="POST" th:action="@{/admin/orders/edit/{id}(id=${order.getId()})}" th:object="${order}"
+          enctype="multipart/form-data">
+        <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+        <p th:text="'Пользователь : ' + ${order.getPerson().getLogin()}">
+            <img th:src="'/img/' + ${order.getProduct().getImageList()[0].getFileName()}" width="100px" alt="" src="">
+        <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
+        <p th:text="'Количество: ' + ${order.getCount()}">
+        <p th:text="'Цена: ' + ${order.getPrice()}">
+        <p th:text="'Стоимость: ' + ${order.getPrice() * order.getCount()}">
+        <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+        <label for="status" th:text="'Cтатус: ' + ${order.getStatus()}"></label>
+        <br> <br>
+        <label for="search_status">Изменить статус:</label>
+        <select name="status" id="search_status">
+            <div th:each="status : ${T(com.example.springsecurityapplication.enumm.Status).values()}">
+                <option th:text="${status}" th:value="${status}">
+            </div>
+        </select>
+        <input type="submit" value="Изменить статус">
+        <br>
+    </form>
+    <br>
+</div>
+<hr>
+
+<h3>Все заказы: </h3>
+<div th:each="order : ${orders}">
+    <form th:method="POST" th:action="@{/admin/orders/edit/{id}(id=${order.getId()})}" th:object="${order}"
+          enctype="multipart/form-data">
+        <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+        <p th:text="'Пользователь : ' + ${order.getPerson().getLogin()}">
+        <div th:if="${!order.getProduct().getImageList.isEmpty()}">
+            <img th:src="'/img/' + ${order.getProduct().getImageList[0]?.getFileName()}" width="150px" alt="" src="">
+        </div>
+        <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
+        <p th:text="'Количество: ' + ${order.getCount()}">
+        <p th:text="'Цена: ' + ${order.getPrice()}">
+        <p th:text="'Стоимость: ' + ${order.getPrice() * order.getCount()}">
+        <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+        <label for="status" th:text="'Cтатус: ' + ${order.getStatus()}"></label>
+        <br> <br>
+        <label for="status">Изменить статус:</label>
+        <select name="status" id="status">
+            <div th:each="state : ${T(com.example.springsecurityapplication.enumm.Status).values()}">
+                <option th:text="${state}" th:value="${state}">
+            </div>
+        </select>
+        <input type="submit" value="Изменить статус">
+        <br>
+    </form>
+    <br>
+</div>
+</body>
+</html>

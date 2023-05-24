@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление категории</title>
+</head>
+<body>
+<a th:href="@{/admin}">Вернуться в личный кабинет</a>
+<br>
+<h3>Добавление категории</h3>
+<form th:method="POST" th:action="@{/admin/category/add}" th:object="${category}" enctype="multipart/form-data">
+    <label for="name">Введите название категории: </label>
+    <input type="text" th:field="*{name}" placeholder="Название" id="name">
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    <br>
+    <br>
+    <input type="submit" value="Добавить">
+</form>
+</body>
+</html>
